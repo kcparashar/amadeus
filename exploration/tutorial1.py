@@ -36,14 +36,18 @@ import sqlite3
 import numpy as np # get it at: http://numpy.scipy.org/
 # path to the Million Song Dataset subset (uncompressed)
 # CHANGE IT TO YOUR LOCAL CONFIGURATION
-msd_subset_path='/Users/sidwyn/Documents/School/CS194/MillionSongSubset'
+# Path to the Million Song Dataset subset
+msd_subset_path='/Users/Eric/Dropbox/Documents/Classes_UCB/CS194/MSongsDB/MillionSongSubset'
 msd_subset_data_path=os.path.join(msd_subset_path,'data')
 msd_subset_addf_path=os.path.join(msd_subset_path,'AdditionalFiles')
 assert os.path.isdir(msd_subset_path),'wrong path' # sanity check
-# path to the Million Song Dataset code
-# CHANGE IT TO YOUR LOCAL CONFIGURATION
-msd_code_path='/Users/sidwyn/Documents/School/CS194/MillionSongSubset/MSongsDB'
+
+import h5py
+
+# Path to the Million Song Dataset code
+msd_code_path='/Users/Eric/Dropbox/Documents/Classes_UCB/CS194/MSongsDB'
 assert os.path.isdir(msd_code_path),'wrong path' # sanity check
+sys.path.append( os.path.join(msd_code_path,'PythonSrc') )
 # we add some paths to python so we can import MSD code
 # Ubuntu: you can change the environment variable PYTHONPATH
 # in your .bashrc file so you do not have to type these lines
