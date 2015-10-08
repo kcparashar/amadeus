@@ -8,19 +8,10 @@ In this project, we will attempt to discover the features behind the popular mus
 2. Obtain the sample codebase. https://github.com/tb2332/MSongsDB 
 3. Download SQLite DB Browser: http://sqlitebrowser.org
 4. Download Panoply (to open HDFS5): http://www.giss.nasa.gov/tools/panoply/download_mac.html
-5. Clone the repo, and work in dataexploration.py. Set your own path to the Million Song Dataset subset in setup.py.
-
-
-### Todos
-
- - Write Tests
- - Rethink Github Save
- - Add Code Comments
- - Add Night Mode
+5. Clone the repo, and work in **dataexploration.py**. Set your own path to the Million Song Dataset subset in **setup.py**.
 
 ### Acknowledgements
 ----
-
 
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
 The Million Song Dataset. In Proceedings of the 12th International Society
