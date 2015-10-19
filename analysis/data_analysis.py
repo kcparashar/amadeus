@@ -6,6 +6,13 @@ pp = pprint.PrettyPrinter(indent=2)
 
 """
 Method to convert all hdf5 files into csv with 10,000 lines of format:
+data:
+key, mode, tempo, time_signature, loudness, *timbre* 
+
+target:
+year
+
+The indices of the two match up. 
 
 """
 def convert_to_csv():
