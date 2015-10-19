@@ -7,7 +7,7 @@
 *.o
 *.so
 *.pyc
-data.csv
+*data.csv
 
 /exploration/setup.py
 /exploration/setup.pyc
