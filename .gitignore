@@ -30,6 +30,10 @@
 *.sql
 *.sqlite
 
+# Dataset #
+###########
+MillionSongSubset/
+
 # OS generated files #
 ######################
 .DS_Store
