@@ -30,11 +30,15 @@ def convert_to_csv():
 					count +=1
 					target.append([year])
 					row = []
+					row += [get_analysis_property(h5,'duration')]
+					row += [get_analysis_property(h5,'end_of_fade_in')]
 					row += [get_analysis_property(h5,'key')]
-					row += [get_analysis_property(h5,'mode')]
+					row += [get_analysis_property(h5,'key_confidence')]
+					row += [get_analysis_property(h5,'loudness')]
+					row += [get_analysis_property(h5,'start_of_fade_out')]
 					row += [get_analysis_property(h5,'tempo')]
 					row += [get_analysis_property(h5,'time_signature')]
-					row += [get_analysis_property(h5,'loudness')]
+					row += [get_analysis_property(h5,'time_signature_confidence')]
 					# uncomment row below to get the timbre as well.
 					# row += [get_timbre(h5)]
 					# print row
@@ -74,6 +78,6 @@ def get_year(h5):
 
 
 
-# convert_to_csv()
+convert_to_csv()
 
 
