@@ -1,6 +1,5 @@
 from sklearn import cross_validation, ensemble, linear_model, feature_selection, neighbors
 import csv
-
 import numpy as np
 import pdb
 
@@ -9,14 +8,14 @@ def main():
     with open('data_no_timbre.csv','r') as f:
         reader = csv.reader(f)
         headers = next(reader)
-    train = np.genfromtxt(open('data_no_timbre.csv','r'), delimiter=',', dtype='f8')
+    train = np.genfromtxt(open('data_no_timbre.csv','r'), delimiter=',', dtype='f8', skip_header=1)
     train[np.isnan(train)] = 0
     target = np.genfromtxt(open('target_no_timbre.csv','r'), delimiter=',', dtype='f8')
 
     print("Creating test and train data...")
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(train, target, test_size=0.1, random_state=0)
 
-    #pdb.set_trace()
+    # pdb.set_trace()
 
     # kNN classifier
     print("Generating kNN...")
