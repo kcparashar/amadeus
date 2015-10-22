@@ -5,11 +5,11 @@ import pprint
 from scipy import stats
 from collections import Counter
 
-# Note by Sidwyn: 
+# Note by Sidwyn:
 # Pdb is useful for debugging. Simply put pdb.set_trace() and it will stop at that breakpoint.
 
 # Path to the Million Song Dataset subset
-msd_subset_path='/Users/Eric/Dropbox/Documents/Classes_UCB/CS194/MSongsDB/MillionSongSubset'
+msd_subset_path='/Users/maxwolffe/Documents/Cal/Fall2015/CS194/MillionSongSubset/MSongsDB'
 msd_subset_data_path=os.path.join(msd_subset_path,'data')
 msd_subset_addf_path=os.path.join(msd_subset_path,'AdditionalFiles')
 assert os.path.isdir(msd_subset_path),'wrong path' # sanity check

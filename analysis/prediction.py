@@ -1,44 +1,66 @@
-from sklearn import cross_validation, ensemble, linear_model, feature_selection
-
+from sklearn import cross_validation, ensemble, linear_model, feature_selection, neighbors
+import csv
 import numpy as np
 import pdb
 
 def main():
-	train = np.genfromtxt(open('data_no_timbre.csv','r'), delimiter=',', dtype='f8')
-	train[np.isnan(train)] = 0
-	target = np.genfromtxt(open('target_no_timbre.csv','r'), delimiter=',', dtype='f8')
+    print("Loading Data...")
+    with open('data_no_timbre.csv','r') as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+    train = np.genfromtxt(open('data_no_timbre.csv','r'), delimiter=',', dtype='f8', skip_header=1)
+    train[np.isnan(train)] = 0
+    target = np.genfromtxt(open('target_no_timbre.csv','r'), delimiter=',', dtype='f8')
 
-	X_train, X_test, y_train, y_test = cross_validation.train_test_split(train, target, test_size=0.1, random_state=0)
+    print("Creating test and train data...")
+    X_train, X_test, y_train, y_test = cross_validation.train_test_split(train, target, test_size=0.1, random_state=0)
 
-	# pdb.set_trace()
-	
-	# Random Forest
-	# rf = ensemble.RandomForestClassifier(n_estimators=1000, n_jobs=8)
-	# rf.fit(X_train, y_train)
-	
-	# Linear Regression Model
-	# lr = linear_model.LinearRegression(n_jobs=8)
-	# lr.fit(X_train, y_train)
+    # pdb.set_trace()
 
-	# Logistic Regression Model
-	lr2 = linear_model.LogisticRegression()
-	# lr2.fit(X_train, y_train)
+    # kNN classifier
+    print("Generating kNN...")
+    knn = neighbors.KNeighborsClassifier() # default neighbors is 5,
+    knn.fit(X_train, y_train);
 
-	rfe = feature_selection.RFE(lr2, 2)
-	rfe.fit(X_train, y_train)
+    # Random Forest
+    print("Generating Random Forest...")
+    rf = ensemble.RandomForestClassifier(n_estimators=1000, n_jobs=8)
+    rf.fit(X_train, y_train)
 
-	model = rfe # Set model here for prediction
-	
-	guesses = model.predict(X_test)
+    # Linear Regression Model
+    print("Generating Linear Regression...")
+    lr = linear_model.LinearRegression(n_jobs=8)
+    lr.fit(X_train, y_train)
 
-	right = 0
+    # Logistic Regression Model
+    print("Generating Logistic Regression...")
+    lr2 = linear_model.LogisticRegression()
+    # lr2.fit(X_train, y_train)
 
-	for counter, guess in enumerate(guesses):
-		if abs(guess - y_test[counter]) < 5:
-			right += 1
+    rfe = feature_selection.RFE(lr2, 2)
+    rfe.fit(X_train, y_train)
 
-	print 'Number of close guesses are: ' + str(right)
-	print 'Total accuracy = ' + str(right*1.0/len(y_test))
+    print("kNN Accuracy: ")
+    model_accuracy(knn, X_test, y_test)
+    print("Random Forest Accuracy: ")
+    model_accuracy(rf, X_test, y_test)
+    print("Linear Regression Accuracy: ")
+    model_accuracy(lr, X_test, y_test)
+    print("Logistic Regression Accuracy: ")
+    model_accuracy(rfe, X_test, y_test)
+
+def model_accuracy(model, test_set, test_target):
+    guesses = model.predict(test_set)
+    right = 0
+
+    for counter, guess in enumerate(guesses):
+        if abs(guess - test_target[counter]) < 5:
+            right += 1
+
+    print 'Number of close guesses are: ' + str(right)
+    print 'Total accuracy = ' + str(right*1.0/len(test_target))
+
+
 
 if __name__=="__main__":
-	main()
+    main()
