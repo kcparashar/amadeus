@@ -1,2 +1,6 @@
-Year~
-{% predicted_year %}
+<!doctype html>
+{% if song_name %}
+  <h1>The predicted year of {{song_name}} is {{ predicted_year }}!</h1>
+{% else %}
+    <h1>You didn't specify a song!</h1>
+{% endif %}
