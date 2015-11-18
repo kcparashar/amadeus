@@ -15,12 +15,13 @@ def main():
     print("Creating test and train data...")
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(train, target, test_size=0.1, random_state=0)
 
-    # pdb.set_trace()
+    pdb.set_trace()
 
     # kNN classifier
     print("Generating kNN...")
     knn = neighbors.KNeighborsClassifier() # default neighbors is 5,
     knn.fit(X_train, y_train);
+
 
     # Random Forest
     print("Generating Random Forest...")
@@ -40,14 +41,18 @@ def main():
     rfe = feature_selection.RFE(lr2, 2)
     rfe.fit(X_train, y_train)
 
+
     print("kNN Accuracy: ")
     model_accuracy(knn, X_test, y_test)
+
     print("Random Forest Accuracy: ")
     model_accuracy(rf, X_test, y_test)
     print("Linear Regression Accuracy: ")
     model_accuracy(lr, X_test, y_test)
     print("Logistic Regression Accuracy: ")
     model_accuracy(rfe, X_test, y_test)
+
+    return knn
 
 def model_accuracy(model, test_set, test_target):
     guesses = model.predict(test_set)
@@ -63,4 +68,4 @@ def model_accuracy(model, test_set, test_target):
 
 
 if __name__=="__main__":
-    main()
+    model = main()
