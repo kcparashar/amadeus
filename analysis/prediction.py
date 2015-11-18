@@ -15,7 +15,7 @@ def main():
     print("Creating test and train data...")
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(train, target, test_size=0.1, random_state=0)
 
-    # pdb.set_trace()
+    #pdb.set_trace()
 
     # kNN classifier
     print("Generating kNN...")
