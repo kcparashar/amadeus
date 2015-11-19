@@ -23,8 +23,13 @@ def get_features(song):
 
   a_sum = song.audio_summary
   url = a_sum['analysis_url']
+  print "\n"*5
+  print url
+  print "\n"*5
+
   r = requests.get(url)
   info = r.json()['track']
+  print r.json().keys()
   features.append(a_sum['duration'])
   features.append(info['end_of_fade_in'])
   features.append(info['key'])
@@ -37,7 +42,7 @@ def get_features(song):
 
   pp.pprint(["Hello"])
   pp.pprint(features)
-  return features
+  return features, info['']
 
 @app.route('/')
 def home():
@@ -54,17 +59,8 @@ def guess_song():
   features = get_features(demo)
   year = model.predict(features)
   year = str(int(year[0]))
-  return render_template('index.html', song_name=song_title, predicted_year=year, titles=[song.title for song in songs], artist=demo.artist_name)
+  return render_template('index.html', song_name=song_title, predicted_year=year, titles=[song.title for song in songs], artist=demo.artist_name, actual_year=1234)
 
-@app.route('/song_year/<song_name>')
-def song_year(song_name=None):
-  #features = get_features(song)
-  features = np.array([  6.55146500e+01,   2.27000000e+00,   3.00000000e+00,
-           7.10000000e-02,  -2.27100000e+01,   6.09290000e+01,
-                    1.00088000e+02,   5.00000000e+00,   6.95000000e-01])
-  year = model.predict(features)
-  year = str(int(year[0]))
-  return render_template('year.html', song_name=song_name, predicted_year=year)
 
 if __name__ == '__main__':
   app.debug = True

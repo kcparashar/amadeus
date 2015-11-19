@@ -6,14 +6,15 @@
         <form action="{{ url_for('guess_song') }}" method="post">
 		    <dl>
 		      <dt>Song:
-		      <dd><input type="text" name="song" size="30" value="{{ request.form.song }}">
+		      <dd><input type="text" name="song" size="60" value="{{ request.form.song }}">
 		    </dl>
 		    <div class="actions"><input type="submit" value="Song Select"></div>
 		  </form>
     </div>
 </div>
 {% if song_name %}
-  <h1>The predicted year of {{song_name}} by {{artist}} is {{ predicted_year }}!</h1>
+  <h3>The predicted year of {{song_name}} by {{artist}} is {{ predicted_year }}!</h3>
+  <h3>The actual year was: {{actual_year}}</h3>
 {% else %}
     <h1>You didn't specify a song!</h1>
 {% endif %}
