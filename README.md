@@ -10,6 +10,14 @@ In this project, we will attempt to discover the features behind the popular mus
 4. Download Panoply (to open HDFS5): http://www.giss.nasa.gov/tools/panoply/download_mac.html
 5. Clone the repo, and work in **dataexploration.py**. Set your own path to the Million Song Dataset subset in **setup.py**.
 
+### Installing the EchoNestAPI 
+
+Either: 
+- Use setuptools: `easy_install -U pyechonest`
+- Download the zip from the releases page: https://github.com/echonest/pyechonest/releases
+  - Unpack, navigate to the echonest directory and run: `sudo python setup.py install`
+
+
 ### Acknowledgements
 ----
 
