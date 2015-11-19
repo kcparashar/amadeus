@@ -23,13 +23,8 @@ def get_features(song):
 
   a_sum = song.audio_summary
   url = a_sum['analysis_url']
-  print "\n"*5
-  print url
-  print "\n"*5
-
   r = requests.get(url)
   info = r.json()['track']
-  print r.json().keys()
   features.append(a_sum['duration'])
   features.append(info['end_of_fade_in'])
   features.append(info['key'])
@@ -40,9 +35,8 @@ def get_features(song):
   features.append(info['time_signature'])
   features.append(info['time_signature_confidence'])
 
-  pp.pprint(["Hello"])
-  pp.pprint(features)
-  return features, info['']
+  # pp.pprint(features)
+  return features
 
 @app.route('/')
 def home():
