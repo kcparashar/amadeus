@@ -1,1 +1,29 @@
-Hello!
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h1>Song Prediction</h1>
+        <form action="{{ url_for('guess_song') }}" method="post">
+		    <dl>
+		      <dt>Song:
+		      <dd><input type="text" name="song" size="30" value="{{ request.form.song }}">
+		    </dl>
+		    <div class="actions"><input type="submit" value="Song Select"></div>
+		  </form>
+    </div>
+</div>
+{% if song_name %}
+  <h1>The predicted year of {{song_name}} by {{artist}} is {{ predicted_year }}!</h1>
+{% else %}
+    <h1>You didn't specify a song!</h1>
+{% endif %}
+
+<br><br>
+
+{% for title in titles %}
+	<li>{{title}}
+{% else %}
+	<li><em>There's no message so far.</em>
+{% endfor %}
+<!-- /.row -->
+{% endblock %}
