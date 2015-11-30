@@ -119,11 +119,6 @@
 }
 
 
-.bpm {
- -webkit-animation: color_change 0.5s infinite alternate;
- animation: color_change 1.5s infinite alternate;
-}
-
 @-webkit-keyframes color_change {
  from { color: white; }
  to { color: "#0097a7"; }
