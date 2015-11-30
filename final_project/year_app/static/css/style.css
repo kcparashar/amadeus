@@ -1,0 +1,134 @@
+.navbar-default {
+  background-color: #0097a7;
+  border-color: #0097a7;
+}
+.navbar-default .navbar-brand {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #cecece;
+}
+.navbar-default .navbar-text {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #cecece;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #cecece;
+  background-color: #0097a7;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #cecece;
+  background-color: #0097a7;
+}
+.navbar-default .navbar-toggle {
+  border-color: #0097a7;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #0097a7;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ecf0f1;
+}
+.navbar-default .navbar-link {
+  color: #ecf0f1;
+}
+.navbar-default .navbar-link:hover {
+  color: #cecece;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #cecece;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #cecece;
+    background-color: #0097a7;
+  }
+}
+
+
+
+.chart {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.chart canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.percent {
+  display: inline-block;
+  line-height: 200px;
+  z-index: 2;
+}
+.percent:after {
+  content: '%';
+  margin-left: 0.1em;
+  font-size: .8em;
+}
+
+.span6 {
+  float: left;
+  width: 50%;
+}
+@media only screen and (max-width: 600px) {
+  li {
+    font-size: 14.4px;
+  }
+}
+@media only screen and (max-width: 430px) {
+  .span6 {
+    float: none;
+    width: 100%;
+  }
+  body {
+    padding-top: 0;
+  }
+  ul {
+    height: auto;
+    position: static;
+  }
+  li {
+    display: block;
+    width: 100%;
+  }
+  li a {
+    white-space: normal;
+  }
+  a.active:after {
+    display: none;
+  }
+}
+
+
+.bpm {
+ -webkit-animation: color_change 0.5s infinite alternate;
+ animation: color_change 1.5s infinite alternate;
+}
+
+@-webkit-keyframes color_change {
+ from { color: white; }
+ to { color: "#0097a7"; }
+}
+@keyframes color_change {
+ from { color: white; }
+ to { color: "#0097a7"; }
+}

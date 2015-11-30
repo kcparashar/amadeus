@@ -1,30 +1,169 @@
 {% extends "layout.html" %}
 {% block body %}
+
 <div class="row">
     <div class="col-lg-12 text-center">
-        <h1>Song Prediction</h1>
+        <h1>Amadeus Song Predictor</h1>
+        <h4>Search for a song title below to find the year we believe it was recorded in.</h3>
+        <br>
+
         <form action="{{ url_for('guess_song') }}" method="post">
 		    <dl>
-		      <dt>Song:
-		      <dd><input type="text" name="song" size="60" value="{{ request.form.song }}">
+		      <dt>
+		      <dd>Song:  <input type="text" name="song" size="60" value="{{ request.form.song }}">
 		    </dl>
-		    <div class="actions"><input type="submit" value="Song Select"></div>
+		    <div class="actions"><input type="submit" value="Search Song" style="background-color: #0097A7;color:white"></div>
 		  </form>
     </div>
 </div>
 {% if song_name %}
-  <h3>The predicted year of {{song_name}} by {{artist}} is {{ predicted_year }}!</h3>
-  <h3>The actual year was: {{actual_year}}</h3>
-{% else %}
-    <h1>You didn't specify a song!</h1>
+<div class="row">
+    <div class="col-lg-8 text-right">
+		<h3>The predicted year of {{song_name}} by {{artist}} is: </h3>
+	</div>
+    <div class="col-lg-4 text-left">
+		<p id ="predicted" style="font-family: cursive; font-size: 50px; font-weight:bold; color:#0097a7" ></p>
+		<script>
+			var options = {
+			  useEasing : true, 
+			  useGrouping : true, 
+			  separator : '', 
+			  decimal : '.', 
+			  prefix : '', 
+			  suffix : '' 
+			};
+			var numAnim = new CountUp("predicted", 1900, {{predicted_year}},0, 3.5, options);
+			numAnim.start();
+		</script>
+	</div>
+</div>
+<div class="row">
+    <div class="col-lg-8 text-right">
+		<h4>The actual year was: </h3>
+	</div>
+    <div class="col-lg-4 text-left">
+		<p id ="actual" style="font-family: cursive; font-size: 30px; color:#0097a7" ></p>
+		<script>
+			var options = {
+			  useEasing : true, 
+			  useGrouping : true, 
+			  separator : '', 
+			  decimal : '.', 
+			  prefix : '', 
+			  suffix : '' 
+			};
+			var numAnim2 = new CountUp("actual", 1900, {{actual_year}},0, 5.5, options);
+			setTimeout(function(){
+			    numAnim2.start();
+			}, 1000);
+		</script>
+	</div>	
+</div>
+<div class="row">
+	{% if img_url %}
+	<img src={{img_url}} style="width:30%;height:228px;display:block;margin:auto;">
+	{% endif %}
+</div>
+
 {% endif %}
+
 
 <br><br>
 
+{% if dancy %}
+
+<div style="background-color:#0097a7; widht:100%; height:800px;">
+	<div class="row text-center">
+		<h4 style="color:white;font-size:40px; font-family:cursive ">Song Visualizations and Statistics </h4>
+	</div>
+	<div class="row" style="border-bottom:3px solid white" data-sr>
+		<div class="col-lg-4 text-center" style="margin-top:25px;margin-bottom: 25px;">
+		<div style="width: 220px; height:250px; margin: 0 auto;">
+			<span class="chart" data-percent="{{energy}}">
+				<span class="percent" style="color:white; font-size:25px;"></span>
+			</span>
+			</div>
+		<span style="color:white; font-size:18px;">General Energy of the Song</span>
+		</div>
+		<div class="col-lg-4 text-center" style="margin-top:25px;margin-bottom: 25px; border-right:3px solid white; border-left:3px solid white">
+		<div style="width: 220px; height:250px; margin: 0 auto;">
+			<span class="chart" data-percent="{{dancy}}">
+				<span class="percent" style="color:white; font-size:25px;"></span>
+			</span>
+			</div>
+		<span style="color:white; font-size:18px;">General Danceability of the Song</span>
+		</div>
+		<div class="col-lg-4 text-center" style="margin-top:25px;margin-bottom: 25px;">
+		<div style="width: 220px; height:250px; margin: 0 auto;">
+				<span class="chart" data-percent="{{loudness}}">
+				<span class="percent" style="color:white; font-size:25px;"></span>
+				</span>
+			</div>
+		<span style="color:white; font-size:18px;">General Loudness of the Song</span>
+		</div>
+	</div>
+
+	<div class ="row" data-sr>
+		<div class="col-lg-4 text-center" style="margin-top:30px;">
+			<p style="font-size:66px;" id="BPM" style="-webkit-animation: color_change {{tempo_rate}}s infinite alternate; animation: color_change {{tempo_rate}}s infinite alternate;">{{tempo}} bpm</p>
+			<p style="color:white; font-size:18px;"> Tempo of the Song</p>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+<script>
+
+$(function() {
+	// $('.chart').easyPieChart({
+	// 	barColor:"white",
+	// 	trackColor:false,
+	// 	lineWidth:10,
+	// 	size:200,
+	// 	easing: 'easeOutBounce',
+	// 	onStep: function(from, to, percent) {
+	// 		$(this.el).find('.percent').text(Math.round10(percent, -1));
+	// 	}
+	// });
+	// var chart = window.chart = $('.chart').data('easyPieChart');
+	// var properties = {
+	//    color : 'red'
+	// };
+
+	// console.log($('.bpm'))
+	// $('.bpm').pulse(properties, { pulses : -1, interval:3 });
+
+	var config = { 
+	  complete: function( el ) {
+	  	console.log("FIRE")
+	    $('.chart').easyPieChart({
+			barColor:"white",
+			trackColor:false,
+			lineWidth:10,
+			size:200,
+			easing: 'easeOutBounce',
+			onStep: function(from, to, percent) {
+				$(this.el).find('.percent').text(Math.round10(percent, -1));
+			}
+		});
+		var chart = window.chart = $('.chart').data('easyPieChart');
+		$("#BPM").addClass("bpm")
+	  }
+	}
+
+	window.sr = new scrollReveal(config); 
+});
+
+
+
+</script>
+
+
+<!-- 
 {% for title in titles %}
 	<li>{{title}}
 {% else %}
 	<li><em>There's no message so far.</em>
-{% endfor %}
+{% endfor %} -->
 <!-- /.row -->
 {% endblock %}
