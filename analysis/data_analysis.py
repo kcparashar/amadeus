@@ -25,75 +25,86 @@ def convert_to_csv():
     target = []
     count = 0
 
-    with open('data_no_timbre.csv', 'w+') as f:
-        with open('target_no_timbre.csv', 'w+') as f2:
+
+    with open('data_timbre.csv', 'w+') as f:
+        with open('target_timbre.csv', 'w+') as f2:
             writer = csv.writer(f)
             target_writer = csv.writer(f2)
 
             for root, dirs, files in os.walk(msd_subset_data_path):
-                if count < 10:
-                    files = glob.glob(os.path.join(root,'*.h5'))
-                    for f in files:
-                        try: # Opening is very prone to causing exceptions, we'll just skip file if exception is thrown
-                            h5 = getter.open_h5_file_read(f)
-                            year = getter.get_year(h5)
-                            if year:
-                                count +=1
-                                print "Currently at " + str(count)
-                                target.append([year])
-                                row = []
-                                
-                                timbre = getter.get_segments_timbre(h5)
-                                segstarts = getter.get_segments_start(h5)
-                                btstarts = getter.get_beats_start(h5)
-                                duration = getter.get_duration(h5)
-                                end_of_fade_in = getter.get_end_of_fade_in(h5)
-                                key = getter.get_key(h5)
-                                key_confidence = getter.get_key_confidence(h5)
-                                loudness = getter.get_loudness(h5)
-                                start_of_fade_out = getter.get_start_of_fade_out(h5)
-                                tempo = getter.get_tempo(h5)
-                                time_signature = getter.get_time_signature(h5)
-                                time_signature_confidence = getter.get_time_signature_confidence(h5)
+                files = glob.glob(os.path.join(root,'*.h5'))
+                for f in sorted(files):
+                    try: # Opening is very prone to causing exceptions, we'll just skip file if exception is thrown
+                        h5 = getter.open_h5_file_read(f)
+                        year = getter.get_year(h5)
+                        if year:
+                            count +=1
 
-                                h5.close() # VERY IMPORTANT
+                            analysis_file = open('current_analysis_status.txt','a')
+                            update = "Currently at file name: " + str(f) + " and at number " + str(count) + "\n"
+                            analysis_file.write(update)
+                            print update
+                            analysis_file.close()
 
-                                segstarts = np.array(segstarts).flatten()
-                                btstarts = np.array(btstarts).flatten()
+                            target.append([year])
+                            row = []
+                            
+                            timbre = getter.get_segments_timbre(h5)
+                            segstarts = getter.get_segments_start(h5)
+                            btstarts = getter.get_beats_start(h5)
+                            duration = getter.get_duration(h5)
+                            end_of_fade_in = getter.get_end_of_fade_in(h5)
+                            key = getter.get_key(h5)
+                            key_confidence = getter.get_key_confidence(h5)
+                            loudness = getter.get_loudness(h5)
+                            start_of_fade_out = getter.get_start_of_fade_out(h5)
+                            tempo = getter.get_tempo(h5)
+                            time_signature = getter.get_time_signature(h5)
+                            time_signature_confidence = getter.get_time_signature_confidence(h5)
 
-                                bttimbre = align_feats(timbre.T, segstarts, btstarts, duration, end_of_fade_in, key, key_confidence, loudness, start_of_fade_out, tempo, time_signature, time_signature_confidence)
+                            h5.close() # VERY IMPORTANT
 
-                                if bttimbre is None:
-                                    continue # Skip this track, some features broken
+                            segstarts = np.array(segstarts).flatten()
+                            btstarts = np.array(btstarts).flatten()
 
-                                npicks, winsize, finaldim = 12, 12, 144  # Calculated by 12 * 12. 12 is fixed as number of dimensions.
-                                processed_feats = extract_and_compress(bttimbre, npicks, winsize, finaldim)
-                                n_p_feats = processed_feats.shape[0]
+                            bttimbre = align_feats(timbre.T, segstarts, btstarts, duration, end_of_fade_in, key, key_confidence, loudness, start_of_fade_out, tempo, time_signature, time_signature_confidence)
 
-                                if processed_feats is None:
-                                    continue # Skip this track, some features broken
+                            if bttimbre is None:
+                                continue # Skip this track, some features broken
 
-                                row = processed_feats.flatten()
-                                if len(row) != 12*144: # 12 dimensions * 144 features per dimension
-                                    continue # Not enough features
+                            npicks, winsize, finaldim = 12, 12, 144  # Calculated by 12 * 12. 12 is fixed as number of dimensions.
+                            processed_feats = extract_and_compress(bttimbre, npicks, winsize, finaldim)
+                            n_p_feats = processed_feats.shape[0]
 
-                                year_row = np.array([year])
+                            if processed_feats is None:
+                                continue # Skip this track, some features broken
 
-                                if row.any() and year_row.any():
-                                    writer.writerow(row)
-                                    target_writer.writerow(year_row)
+                            row = processed_feats.flatten()
+                            if len(row) != 12*144: # 12 dimensions * 144 features per dimension
+                                continue # Not enough features
 
-                                i+=1
+                            year_row = np.array([year])
 
-                            else:
-                                h5.close()
+                            if row.any() and year_row.any():
+                                writer.writerow(row)
+                                target_writer.writerow(year_row)
 
-                        except Exception:
-                            pass
+                            i+=1
+
+                        else:
+                            h5.close()
+
+                    except Exception:
+                        pass
 
 
 
     print 'Finished!'
+
+    analysis_file = open('current_analysis_status.txt','a')
+    analysis_file.write('Done!')
+    analysis_file.close()
+
     return 
 
 

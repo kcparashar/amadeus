@@ -7,12 +7,10 @@ def main():
     f2 = open('accuracies.txt','w')
 
     print("Loading Data...")
-    with open('data_no_timbre.csv','r') as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-    train = np.genfromtxt(open('data_no_timbre.csv','r'), delimiter=',', dtype='f8')
+    
+    train = np.genfromtxt(open('data_timbre.csv','r'), delimiter=',', dtype='f8')
     train[np.isnan(train)] = 0
-    target = np.genfromtxt(open('target_no_timbre.csv','r'), delimiter=',', dtype='f8')
+    target = np.genfromtxt(open('target_timbre.csv','r'), delimiter=',', dtype='f8')
 
     print("Creating test and train data... \n")
 
