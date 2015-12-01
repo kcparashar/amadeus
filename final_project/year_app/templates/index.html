@@ -72,7 +72,7 @@
 
 {% if dancy %}
 
-<div style="background-color:#0097a7; widht:100%; height:800px;">
+<div style="background-color:#0097a7; widht:100%; height:1400px;">
 	<div class="row text-center">
 		<h4 style="color:white;font-size:40px; font-family:cursive ">Song Visualizations and Statistics </h4>
 	</div>
@@ -103,13 +103,84 @@
 		</div>
 	</div>
 
-	<div class ="row" data-sr>
-		<div class="col-lg-4 text-center" style="margin-top:30px;">
+	<div class ="row" style="border-bottom:3px solid white; height:225px;" data-sr>
+		<div class="col-lg-4 text-center" style="margin-top:20px;">
 			<p id="BPM" style="font-size:66px; -webkit-animation: color_change {{tempo_rate}}s infinite alternate; animation: color_change {{tempo_rate}}s infinite alternate;">{{tempo}} bpm</p>
 			<p style="color:white; font-size:18px;"> Tempo of the Song</p>
 		</div>
+		<div class="col-lg-4 text-center" style="margin-top:20px; border-right:3px solid white; border-left:3px solid white">
+			<p id="BPM" style="font-size:66px;color:white;">{{key}}</p>
+			<p style="color:white; font-size:18px;"> Key of the Song</p>
+		</div>
+		<div class="col-lg-4 text-center" style="margin-top:50px; margin-bottom:20px;">
+			<audio controls >
+			  <source src="{{mp3}}" type="audio/mp3">
+			</audio>
+			<br>
+			<span style="color:white; font-size:18px;margin-top:20px;">Preview MP3 of song</span>
+		</div>
+	</div>
+	<div class ="row" style="border-bottom:3px solid white" data-sr>
+		<div class="col-lg-6 text-center" style="margin-top:20px;">
+			<span style="color:white; font-size:18px;">Popularity Metrics</span>
+			<canvas id="radarChart" width="440" height="400"></canvas>
+		</div>
+		<div class="col-lg-6 text-center" style="margin-top:20px; border-left:3px solid white;">
+			<span style="color:white; font-size:18px;">Acoustic Qualities</span>
+			<canvas id="radarChart2" width="440" height="400"></canvas>
+		</div>
 	</div>
 </div>
+		
+		 <script>
+		    var trace3 = {
+			  x: [{{a_hot}}],
+			  y: [{{s_hot}}],
+			  mode: 'markers',
+			  marker:{
+			  	color:"white",
+			  	size:22
+			  }
+			};
+
+			var data = [ trace3 ];
+
+			var layout = {
+			  font:{
+			  	size:18,
+			  	color:"white"
+			  },
+			  height: 300,
+			  width: 300,
+			  xaxis: {
+			  	range: [0,1],
+			  	title:"Artist Hottnesss",
+			  	showgrid:false,
+			  	linewidth:6,
+			  	showline:true,
+			  	linecolor:"white",
+			  	zeroline:true,
+			  	zerolinecolor:"white",
+			  	zerlinewidth:6
+			  },
+			  yaxis: {
+			  	range: [0,1],
+			  	title:"Song Hottness",
+			  	linecolor:"white",
+			  	showgrid:false,
+			  	linewidth:6,
+			  	showline:true,
+			  	zeroline:true,
+			  },
+			  margin:{
+			  	t:0
+			  },
+			  paper_bgcolor:"#0097a7",
+			  plot_bgcolor:"#0097a7"
+			};
+
+			Plotly.newPlot('myDiv', data, layout);
+		 </script>
 {% endif %}
 <script>
 
@@ -151,7 +222,122 @@ $(function() {
 	}
 
 	window.sr = new scrollReveal(config); 
-});
+
+	// ======================================================
+	// Radar Chart
+	// ======================================================
+
+	// Radar Chart Options
+	var radarOptions = {
+		//Boolean - If we show the scale above the chart data			
+		scaleOverlay : false,
+		//Boolean - If we want to override with a hard coded scale
+		scaleOverride : false,
+		//** Required if scaleOverride is true **
+		//Number - The number of steps in a hard coded scale
+		scaleSteps : null,
+		//Number - The value jump in the hard coded scale
+		scaleStepWidth : null,
+		//Number - The centre starting value
+		scaleStartValue : null,
+		//Boolean - Whether to show lines for each scale point
+		scaleShowLine : true,
+		//String - Colour of the scale line	
+		scaleLineColor : "white",
+		//Number - Pixel width of the scale line	
+		scaleLineWidth : 1,
+		//Boolean - Whether to show labels on the scale	
+		scaleShowLabels : false,
+		//Interpolated JS string - can access value
+		scaleLabel : "<%=value%>",
+		//String - Scale label font declaration for the scale label
+		scaleFontFamily : "'Arial'",
+		//Number - Scale label font size in pixels	
+		scaleFontSize : 12,
+		//String - Scale label font weight style	
+		scaleFontStyle : "normal",
+		//String - Scale label font colour	
+		scaleFontColor : "#666",
+		//Boolean - Show a backdrop to the scale label
+		scaleShowLabelBackdrop : true,
+		//String - The colour of the label backdrop	
+		scaleBackdropColor : "rgba(255,255,255,0.75)",
+		//Number - The backdrop padding above & below the label in pixels
+		scaleBackdropPaddingY : 2,
+		//Number - The backdrop padding to the side of the label in pixels	
+		scaleBackdropPaddingX : 2,
+		//Boolean - Whether we show the angle lines out of the radar
+		angleShowLineOut : true,
+		//String - Colour of the angle line
+		angleLineColor : "rgba(255,255,255,0.3)",
+		//Number - Pixel width of the angle line
+		angleLineWidth : 1,			
+		//String - Point label font declaration
+		pointLabelFontFamily : "'Arial'",
+		//String - Point label font weight
+		pointLabelFontStyle : "normal",
+		//Number - Point label font size in pixels	
+		pointLabelFontSize : 12,
+		//String - Point label font colour	
+		pointLabelFontColor : "#EFEFEF",
+		//Boolean - Whether to show a dot for each point
+		pointDot : true,
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 3,
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 1,
+		//Boolean - Whether to fill the dataset with a colour
+		datasetFill : true,
+		//Boolean - Whether to animate the chart
+		animation : true,
+		//Number - Number of animation steps
+		animationSteps : 60,
+		//String - Animation easing effect
+		animationEasing : "easeOutQuart",
+		//Function - Fires when the animation is complete
+		onAnimationComplete : null
+	}
+
+	// Radar Data
+	var radarData = {
+		labels : ["Artist Familiarity","Artist Hottness","Song Hottness","Song Discovery"],
+		datasets : [
+			{
+				fillColor : "rgba(110,220,220,0.5)",
+				strokeColor : "rgba(110,220,220,1)",
+				data : [{{a_fam}},{{a_hot}},{{s_hot}},{{song_disc}}]
+			},
+		]
+	}
+	// Radar Data
+	var radarData2 = {
+		labels : ["Acousticness","Valence","Liveness","Speechiness", "Song Currency"],
+		datasets : [
+			{
+				fillColor : "rgba(110,220,220,0.5)",
+				strokeColor : "rgba(110,220,220,1)",
+				data : [{{acousticness}},{{valence}},{{liveness}},{{speech}},{{song_currency}}]
+			},
+		]
+	}
+
+
+	//Get the context of the Radar Chart canvas element we want to select
+	var ctx = document.getElementById("radarChart").getContext("2d");
+
+	// Create the Radar Chart
+	var myRadarChart = new Chart(ctx).Radar(radarData, radarOptions);
+
+	//Get the context of the Radar Chart canvas element we want to select
+	var ctx2 = document.getElementById("radarChart2").getContext("2d");
+
+	// Create the Radar Chart
+	var myRadarChart2 = new Chart(ctx2).Radar(radarData2, radarOptions);
+	});
 
 
 
