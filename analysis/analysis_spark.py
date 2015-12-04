@@ -8,14 +8,16 @@ import csv
 import pdb
 
 from pyspark import SparkContext, Bootstrap
-from sklearn import cross_validation, ensemble, linear_model, feature_selection, neighbors
+from sklearn import cross_validation, ensemble, linear_model, feature_selection, neighbors, datasets
 from sklearn.cross_validation import train_test_split
 
-def parallelize(spark_context, model, X_train, X_test, y_train, y_test):
-	samples = spark_context.parallelize(Bootstrap(y.size))
 
-	trained_data = samples.map().predict().map().
+def parallelize(sc, model, train, target, size, X_train, X_test, y_train, y_test):
+	samples = sc.parallelize(Bootstrap(size))
+
+	trained_data = samples.map(lambda (i, _): model.fit(train[i], target[i])).predict(X_test).map()
 	return trained_data
+
 
 def model_accuracy(model, test_set, test_target):
     guesses = model.predict(test_set)
@@ -46,7 +48,7 @@ def main():
     # kNN classifier
     print("Generating kNN...")
     knn = neighbors.KNeighborsClassifier() # default neighbors is 5
-   	knn_fit = (SparkContext("local", "Boost"), knn, X_train, X_test, y_train, y_test)
+   	knn_fit = (SparkContext("local", "Boost"), knn, train, target, target.size, X_train, X_test, y_train, y_test)
     knn.fit(X_train, y_train);
 
     # Random Forest
