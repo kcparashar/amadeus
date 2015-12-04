@@ -9,7 +9,7 @@ from collections import Counter
 # Pdb is useful for debugging. Simply put pdb.set_trace() and it will stop at that breakpoint.
 
 # Path to the Million Song Dataset subset
-msd_subset_path='/Users/sidwyn/Documents/School/CS194/MillionSongSubset/'
+msd_subset_path='/Users/maxwolffe/Documents/Cal/Fall2015/cs194/MillionSongSubset/MSongsDB/'
 msd_subset_data_path=os.path.join(msd_subset_path,'data')
 msd_subset_addf_path=os.path.join(msd_subset_path,'AdditionalFiles')
 assert os.path.isdir(msd_subset_path),'wrong path' # sanity check
