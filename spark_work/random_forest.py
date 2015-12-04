@@ -13,7 +13,7 @@ target = sc.textFile("target_timbre.csv")
 zipped_target = target.zipWithIndex()
 keyed_target = zipped_target.map(lambda line: (line[-1], line[:-1]))
 
-target_data = zipped.join(target)
+target_data = keyed_data.join(keyed_target)
 
 #map(lambda line: line.split(",")).map(lambda line: tuple((feature for feature in line)))
 
