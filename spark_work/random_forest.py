@@ -29,7 +29,7 @@ print("Creating Training and Test Data Split")
 #  Setting featureSubsetStrategy="auto" lets the algorithm choose.
 
 model = RandomForest.trainRegressor(trainingData, categoricalFeaturesInfo={},
-                                    numTrees=1000, featureSubsetStrategy="auto",
+                                    numTrees=5, featureSubsetStrategy="auto",
                                     impurity='variance', maxDepth=8, maxBins=32)
 
 # # Evaluate model on test instances and compute test error
@@ -37,9 +37,12 @@ predictions = model.predict(testData.map(lambda x: x.features))
 labelsAndPredictions = testData.map(lambda lp: lp.label).zip(predictions)
 testMSE = labelsAndPredictions.map(lambda (v, p): (v - p) * (v - p)).sum() / float(testData.count())
 print('Test Mean Squared Error = ' + str(testMSE))
-print('Learned regression forest model:')
-print(model.toDebugString())
+
+testAccuracy = labelsAndPredictions.map(lambda (v, p): 1 if (abs(v - p) < 10) else 0).sum() / float(testData.count())
+print('Total Accuracy = ' + str(testAccuracy))
+
+# print('Learned regression forest model:')
+# print(model.toDebugString())
 
 # # Save and load model
-# model.save(sc, "myModelPath")
-# sameModel = RandomForestModel.load(sc, "myModelPath")
+model.save(sc, "myRFModel")
