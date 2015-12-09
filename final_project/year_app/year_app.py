@@ -29,17 +29,27 @@ key_dict={0:"C", 1:"C#", 2:"D", 3:"E"+u"\u266D", 4:"E", 5:"F", 6:"F#", 7:"G", 8:
 # 'start_of_fade_out','tempo','time_signature''time_signature_confidence'
 def get_features(song):
   features = []
-
-  a_sum = song.audio_summary
+  count = 0
+  while count < 3:
+    try:
+      a_sum = song.audio_summary
+      break
+    except:
+      count+=1
+      if count == 3:
+        return False, False
+    print "Timed out, try again"
   url = a_sum['analysis_url']
   # print "\n"*5
   # print url
   # print "\n"*5
   
   viz_dict = {}
-
-  r = requests.get(url)
-  info = r.json()['track']
+  try:
+    r = requests.get(url)
+    info = r.json()['track']
+  except:
+    return False, False
   features.append(a_sum['duration'])
   features.append(info['end_of_fade_in'])
   features.append(info['key'])
@@ -63,11 +73,20 @@ def get_features(song):
   viz_dict["acousticness"] = a_sum["acousticness"]
   viz_dict["valence"] = a_sum["valence"]
   viz_dict["speech"] = a_sum["speechiness"]
-  viz_dict["artist_hottness"] = song.artist_hotttnesss
-  viz_dict["song_hotttnesss"] = song.song_hotttnesss
-  viz_dict["song_currency"] = song.get_song_currency()
-  viz_dict["artist_familiarity"] = song.get_artist_familiarity()
-  viz_dict["song_discovery"] = song.get_song_discovery()
+  count = 0
+  while count < 5:
+    try:
+      viz_dict["artist_hottness"] = song.artist_hotttnesss
+      viz_dict["song_hotttnesss"] = song.song_hotttnesss
+      viz_dict["song_currency"] = song.get_song_currency()
+      viz_dict["artist_familiarity"] = song.get_artist_familiarity()
+      viz_dict["song_discovery"] = song.get_song_discovery()
+      break
+    except:
+      count+=1
+      if count == 3:
+        return False, False
+    print "Timed out, try again"
   pp.pprint(a_sum)
  
   pp.pprint(viz_dict)
@@ -84,11 +103,13 @@ def guess_song():
   while count < 3:
     try:
       songs = pysong.search(title=request.form['song'], buckets=['id:7digital-US', 'tracks', 'song_discovery'], limit=True, results=50, sort="song_hotttnesss-desc")
+      song = songs[0]
       break
     except:
       count+=1
+      if count == 3:
+        return render_template('index.html', cant_find=True)
     print "Timed out, try again"
-  song = songs[0]
   artist_x = song.artist_name
   # pp.pprint([(song.title, song.artist_name) for song in songs[:5]])
   # pp.pprint(song.get_tracks('7digital-US'))
@@ -97,8 +118,12 @@ def guess_song():
   # print cover_url
   foreign_id = for_song['foreign_id'].split(":")[-1]
   # print foreign_id
-  response = py7D.request('track', 'details', trackID=str(foreign_id), pageSize=3)
-  rel_year = response['response']['track']['release']['releaseDate'].split("-")[0]
+  try:
+    response = py7D.request('track', 'details', trackID=str(foreign_id), pageSize=3)
+    rel_year = response['response']['track']['release']['releaseDate'].split("-")[0]
+  except: 
+    return render_template('index.html', cant_find=True)
+    
   listen = py7D.preview_url(foreign_id)
   print
   print listen
@@ -107,6 +132,8 @@ def guess_song():
   a_sum = song.audio_summary
   duration = a_sum['duration']
   features, viz_dict = get_features(song)
+  if not features:
+    return render_template('index.html', cant_find=True)
   year = model.predict(features)
   year = str(int(year[0]))
   print year, rel_year

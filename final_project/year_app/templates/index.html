@@ -16,6 +16,9 @@
 		  </form>
     </div>
 </div>
+{% if cant_find %}
+<h3> Cannot find the song. Please try again </h3>
+{% endif %}
 {% if song_name %}
 <div class="row">
     <div class="col-lg-8 text-right">
