@@ -1,5 +1,7 @@
-# Chart Prediction by Data Daddies
+# Amadeus
+"**Predict the popular year for a song**."
 
+### Goal
 In this project, we will attempt to discover the features behind the popular music of each generation. For instance, if Britney Spears, “Oops I Did It Again” made the charts in 2001, and The Beatles’ “Real Love” made the charts in 1996, we want to see what made the music popular back then – was it the timbre, audio quality, or lyrics? We will then attempt to build a model that is able to predict when the song would have been most popular, which can be useful for future music analyses.
 
 ### Installation
